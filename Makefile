@@ -741,6 +741,9 @@ KEEP_TEMP	?=
 DEFAULT_GPI_EPS_FONTSIZE	?= 22
 DEFAULT_GPI_PDF_FONTSIZE	?= 12
 
+DEFAULT_GPI_EPS_FIGSIZE		?= 5in,3.5in
+DEFAULT_GPI_PDF_FIGSIZE 	?= 5in,3in
+
 # Style file for ReST
 RST_STYLE_FILE			?= $(wildcard _rststyle_._include_.tex)
 
@@ -2223,6 +2226,8 @@ endef
 #
 default-gpi-fontsize = $(if $(filter %.pdf,$1),$(DEFAULT_GPI_PDF_FONTSIZE),$(DEFAULT_GPI_EPS_FONTSIZE))
 
+default-gpi-figsize = $(if $(filter %.pdf,$1), $(DEFAULT_GPI_PDF_FIGSIZE), $(DEFAULT_GPI_EPS_FIGSIZE))
+
 # $(call gpi-fontsize,<gpi file>,<output file>)
 #
 # Find out what the gnuplot fontsize should be.  Tries, in this order:
@@ -2233,6 +2238,12 @@ define gpi-fontsize
 $(strip $(firstword \
 	$(shell $(SED) -e 's/^\#\#FONTSIZE=\([[:digit:]]\{1,\}\)/\1/p' -e 'd' $1 $(strip $(gpi_global))) \
 	$(call default-gpi-fontsize,$2)))
+endef
+
+define gpi-figsize
+$(strip $(firstword \
+	$(shell $(SED) -e 's/^\#\#FIGSIZE=\([[:alnum:],\{1,\}]\)/\1/p' -e 'd' $1 $(strip $(gpi_global))) \
+	$(call default-gpi-figsize,$2)))
 endef
 
 # $(call gpi-monochrome,<gpi file>,[gray])
@@ -2252,7 +2263,8 @@ gpi-font-entry = $(if $(filter %.pdf,$1),$(subst FONTSIZE,$2,$(GPI_FSIZE_SYNTAX)
 define gpi-terminal
 $(if $(filter %.pdf,$2),pdf enhanced,postscript enhanced eps) \
 $(call gpi-font-entry,$2,$(call gpi-fontsize,$1,$2)) \
-$(call gpi-monochrome,$1,$3)
+$(call gpi-monochrome,$1,$3) \
+size $(call gpi-figsize,$1,$2)
 endef
 
 # $(call gpi-embed-pdf-fonts,<input file>,<output file>)
