@@ -2269,7 +2269,7 @@ gpi-font-entry = $(if $(filter %.pdf,$1),$(subst FONTSIZE,$2,$(GPI_FSIZE_SYNTAX)
 #
 # Get the terminal settings for a given gpi and its intended output file
 define gpi-terminal
-$(if $(filter %.pdf,$2),pdfcairo enhanced,postscript enhanced eps) \
+$(if $(filter %.pdf,$2),pdf enhanced,postscript enhanced eps) \
 $(call gpi-font-entry,$2,$(call gpi-fontsize,$1,$2)) \
 $(call gpi-monochrome,$1,$3) \
 size $(call gpi-figsize,$1,$2)
