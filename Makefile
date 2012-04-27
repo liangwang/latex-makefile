@@ -2565,10 +2565,10 @@ endif
 
 # Include only the dependencies used
 ifneq "" "$(source_includes)"
-include $(source_includes)$(call include-message,$(source_includes))
+-include $(source_includes)$(call include-message,$(source_includes))
 endif
 ifneq "" "$(graphic_includes)"
-include $(graphic_includes)$(call include-message,$(graphic_includes))
+-include $(graphic_includes)$(call include-message,$(graphic_includes))
 endif
 
 #
